@@ -99,5 +99,5 @@
 ## Результат работы
 
 * В репозиторий Vagrant cloud добавлен билд с обновлённым ядром версии **5.8.0-1.el7.elrepo.x86_64** по адресу https://app.vagrantup.com/OlegLitvintsev/boxes/CentOS-7.7
-* В репозиторий GitHUB добавлено описание лабораторной работы, оформленной в разметке **Markdown** по адресу https://github.com/OlegLitvintsev/OTUS_Labs/Lab_1/README.md
+* В репозиторий GitHUB добавлено описание лабораторной работы, оформленной в разметке **Markdown** по адресу https://github.com/OlegLitvintsev/OTUS_Labs/blob/main/Lab_1/README.md
 * В репозиторий GitHUB добавлен **Vagrantfile**, загружающий образ виртуальной машины с https://app.vagrantup.com/OlegLitvintsev/boxes/CentOS-7.7
