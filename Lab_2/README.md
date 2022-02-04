@@ -15,5 +15,5 @@
 
 ## Результат работы
 
-* В репозиторий GitHUB добавлен bash скрипт ([MakeRAID5.sh](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_2/MakeRAID5.sh)) создания RAID5, конфигурационный файл для автосборки RAID5 при загрузке ([mdadm.conf](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_2/mdmadm.conf)) и [Vagrant файл](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_2/Vagrantfile), который собирает RAID5 при первом запуске виртуальной машины.
+* В репозиторий GitHUB добавлен bash скрипт ([MakeRAID5.sh](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_2/MakeRAID5.sh)) создания RAID5, конфигурационный файл для автосборки RAID5 при загрузке ([mdadm.conf](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_2/mdadm.conf)) и [Vagrant файл](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_2/Vagrantfile), который собирает RAID5 при первом запуске виртуальной машины.
 
