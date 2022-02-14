@@ -1,0 +1,277 @@
+[vagrant@zfs ~]$ sudo -i
+[root@zfs ~]# lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    0   40G  0 disk
+`-sda1   8:1    0   40G  0 part /
+sdb      8:16   0  512M  0 disk
+sdc      8:32   0  512M  0 disk
+sdd      8:48   0  512M  0 disk
+sde      8:64   0  512M  0 disk
+sdf      8:80   0  512M  0 disk
+sdg      8:96   0  512M  0 disk
+sdh      8:112  0  512M  0 disk
+sdi      8:128  0  512M  0 disk
+[root@zfs ~]# zpool create otus1 mirror /dev/sdb /dev/sdc
+[root@zfs ~]# zpool create otus2 mirror /dev/sdd /dev/sde
+[root@zfs ~]# zpool create otus3 mirror /dev/sdf /dev/sdg
+[root@zfs ~]# zpool create otus4 mirror /dev/sdh /dev/sdi
+[root@zfs ~]# zpool list
+NAME    SIZE  ALLOC   FREE  CKPOINT  EXPANDSZ   FRAG    CAP  DEDUP    HEALTH  ALTROOT
+otus1   480M  91.5K   480M        -         -     0%     0%  1.00x    ONLINE  -
+otus2   480M  91.5K   480M        -         -     0%     0%  1.00x    ONLINE  -
+otus3   480M   106K   480M        -         -     0%     0%  1.00x    ONLINE  -
+otus4   480M  91.5K   480M        -         -     0%     0%  1.00x    ONLINE  -
+[root@zfs ~]# zfs set compression=lzjb otus1
+[root@zfs ~]# zfs set compression=lz4 otus2
+[root@zfs ~]# zfs set compression=gzip-9 otus3
+[root@zfs ~]# zfs set compression=zle otus4
+[root@zfs ~]# zfs get all | grep compression
+otus1  compression           lzjb                   local
+otus2  compression           lz4                    local
+otus3  compression           gzip-9                 local
+otus4  compression           zle                    local
+[root@zfs ~]# for i in {1..4}; do wget -P /otus$i https://gutenberg.org/cache/epub/2600/pg2600.converter.log; done
+--2022-02-14 10:43:14--  https://gutenberg.org/cache/epub/2600/pg2600.converter.log
+Resolving gutenberg.org (gutenberg.org)... 152.19.134.47, 2610:28:3090:3000:0:bad:cafe:47
+Connecting to gutenberg.org (gutenberg.org)|152.19.134.47|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 40784369 (39M) [text/plain]
+Saving to: '/otus1/pg2600.converter.log'
+
+100%[===================================================================================================================================================================================================================================================================================>] 40,784,369  2.25MB/s   in 23s
+
+2022-02-14 10:43:38 (1.70 MB/s) - '/otus1/pg2600.converter.log' saved [40784369/40784369]
+
+--2022-02-14 10:43:38--  https://gutenberg.org/cache/epub/2600/pg2600.converter.log
+Resolving gutenberg.org (gutenberg.org)... 152.19.134.47, 2610:28:3090:3000:0:bad:cafe:47
+Connecting to gutenberg.org (gutenberg.org)|152.19.134.47|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 40784369 (39M) [text/plain]
+Saving to: '/otus2/pg2600.converter.log'
+
+100%[===================================================================================================================================================================================================================================================================================>] 40,784,369  1.90MB/s   in 28s
+
+2022-02-14 10:44:07 (1.40 MB/s) - '/otus2/pg2600.converter.log' saved [40784369/40784369]
+
+--2022-02-14 10:44:07--  https://gutenberg.org/cache/epub/2600/pg2600.converter.log
+Resolving gutenberg.org (gutenberg.org)... 152.19.134.47, 2610:28:3090:3000:0:bad:cafe:47
+Connecting to gutenberg.org (gutenberg.org)|152.19.134.47|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 40784369 (39M) [text/plain]
+Saving to: '/otus3/pg2600.converter.log'
+
+100%[===================================================================================================================================================================================================================================================================================>] 40,784,369  1.07MB/s   in 46s
+
+2022-02-14 10:44:54 (859 KB/s) - '/otus3/pg2600.converter.log' saved [40784369/40784369]
+
+--2022-02-14 10:44:54--  https://gutenberg.org/cache/epub/2600/pg2600.converter.log
+Resolving gutenberg.org (gutenberg.org)... 152.19.134.47, 2610:28:3090:3000:0:bad:cafe:47
+Connecting to gutenberg.org (gutenberg.org)|152.19.134.47|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 40784369 (39M) [text/plain]
+Saving to: '/otus4/pg2600.converter.log'
+
+100%[===================================================================================================================================================================================================================================================================================>] 40,784,369  1.68MB/s   in 29s
+
+2022-02-14 10:45:24 (1.34 MB/s) - '/otus4/pg2600.converter.log' saved [40784369/40784369]
+
+[root@zfs ~]# ls -l /otus*
+/otus1:
+total 22015
+-rw-r--r--. 1 root root 40784369 Feb  2 09:01 pg2600.converter.log
+
+/otus2:
+total 17970
+-rw-r--r--. 1 root root 40784369 Feb  2 09:01 pg2600.converter.log
+
+/otus3:
+total 10948
+-rw-r--r--. 1 root root 40784369 Feb  2 09:01 pg2600.converter.log
+
+/otus4:
+total 39856
+-rw-r--r--. 1 root root 40784369 Feb  2 09:01 pg2600.converter.log
+[root@zfs ~]# zfs list
+NAME    USED  AVAIL     REFER  MOUNTPOINT
+otus1  21.6M   330M     21.5M  /otus1
+otus2  17.6M   334M     17.6M  /otus2
+otus3  10.8M   341M     10.7M  /otus3
+otus4  39.0M   313M     38.9M  /otus4
+[root@zfs ~]# zfs get all | grep compressratio | grep -v ref
+otus1  compressratio         1.81x                  -
+otus2  compressratio         2.22x                  -
+otus3  compressratio         3.64x                  -
+otus4  compressratio         1.00x                  -
+[root@zfs ~]# wget -O archive.tar.gz --no-check-certificate https://drive.google.com/u/0/uc?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg&export=download
+[1] 13277
+[root@zfs ~]# --2022-02-14 10:54:01--  https://drive.google.com/u/0/uc?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg
+Resolving drive.google.com (drive.google.com)... 209.85.233.194, 2a00:1450:4010:c03::c2
+Connecting to drive.google.com (drive.google.com)|209.85.233.194|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://drive.google.com/uc?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg [following]
+--2022-02-14 10:54:01--  https://drive.google.com/uc?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg
+Reusing existing connection to drive.google.com:443.
+HTTP request sent, awaiting response... 303 See Other
+Location: https://doc-0c-bo-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/13hu8q2gtj0o315rjkmm62vad1f1kmu3/1644836025000/16189157874053420687/*/1KRBNW33QWqbvbVHa3hLJivOAt60yukkg [following]
+Warning: wildcards not supported in HTTP.
+--2022-02-14 10:54:07--  https://doc-0c-bo-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/13hu8q2gtj0o315rjkmm62vad1f1kmu3/1644836025000/16189157874053420687/*/1KRBNW33QWqbvbVHa3hLJivOAt60yukkg
+Resolving doc-0c-bo-docs.googleusercontent.com (doc-0c-bo-docs.googleusercontent.com)... 64.233.165.132, 2a00:1450:4010:c08::84
+Connecting to doc-0c-bo-docs.googleusercontent.com (doc-0c-bo-docs.googleusercontent.com)|64.233.165.132|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 7275140 (6.9M) [application/x-gzip]
+Saving to: 'archive.tar.gz'
+
+100%[===================================================================================================================================================================================================================================================================================>] 7,275,140   5.36MB/s   in 1.3s
+
+2022-02-14 10:54:09 (5.36 MB/s) - 'archive.tar.gz' saved [7275140/7275140]
+
+
+[1]+  Done                    wget -O archive.tar.gz --no-check-certificate https://drive.google.com/u/0/uc?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg
+[root@zfs ~]#
+[root@zfs ~]# tar -xzvf archive.tar.gz
+zpoolexport/
+zpoolexport/filea
+zpoolexport/fileb
+[root@zfs ~]# zpool import -d zpoolexport/
+   pool: otus
+     id: 6554193320433390805
+  state: ONLINE
+ action: The pool can be imported using its name or numeric identifier.
+ config:
+
+        otus                         ONLINE
+          mirror-0                   ONLINE
+            /root/zpoolexport/filea  ONLINE
+            /root/zpoolexport/fileb  ONLINE
+[root@zfs ~]# zpool import -d zpoolexport/ otus
+[root@zfs ~]# zpool status otus
+  pool: otus
+ state: ONLINE
+  scan: none requested
+config:
+
+        NAME                         STATE     READ WRITE CKSUM
+        otus                         ONLINE       0     0     0
+          mirror-0                   ONLINE       0     0     0
+            /root/zpoolexport/filea  ONLINE       0     0     0
+            /root/zpoolexport/fileb  ONLINE       0     0     0
+
+errors: No known data errors
+[root@zfs ~]# zfs get all otus
+NAME  PROPERTY              VALUE                  SOURCE
+otus  type                  filesystem             -
+otus  creation              Fri May 15  4:00 2020  -
+otus  used                  2.04M                  -
+otus  available             350M                   -
+otus  referenced            24K                    -
+otus  compressratio         1.00x                  -
+otus  mounted               yes                    -
+otus  quota                 none                   default
+otus  reservation           none                   default
+otus  recordsize            128K                   local
+otus  mountpoint            /otus                  default
+otus  sharenfs              off                    default
+otus  checksum              sha256                 local
+otus  compression           zle                    local
+otus  atime                 on                     default
+otus  devices               on                     default
+otus  exec                  on                     default
+otus  setuid                on                     default
+otus  readonly              off                    default
+otus  zoned                 off                    default
+otus  snapdir               hidden                 default
+otus  aclinherit            restricted             default
+otus  createtxg             1                      -
+otus  canmount              on                     default
+otus  xattr                 on                     default
+otus  copies                1                      default
+otus  version               5                      -
+otus  utf8only              off                    -
+otus  normalization         none                   -
+otus  casesensitivity       sensitive              -
+otus  vscan                 off                    default
+otus  nbmand                off                    default
+otus  sharesmb              off                    default
+otus  refquota              none                   default
+otus  refreservation        none                   default
+otus  guid                  14592242904030363272   -
+otus  primarycache          all                    default
+otus  secondarycache        all                    default
+otus  usedbysnapshots       0B                     -
+otus  usedbydataset         24K                    -
+otus  usedbychildren        2.01M                  -
+otus  usedbyrefreservation  0B                     -
+otus  logbias               latency                default
+otus  objsetid              54                     -
+otus  dedup                 off                    default
+otus  mlslabel              none                   default
+otus  sync                  standard               default
+otus  dnodesize             legacy                 default
+otus  refcompressratio      1.00x                  -
+otus  written               24K                    -
+otus  logicalused           1020K                  -
+otus  logicalreferenced     12K                    -
+otus  volmode               default                default
+otus  filesystem_limit      none                   default
+otus  snapshot_limit        none                   default
+otus  filesystem_count      none                   default
+otus  snapshot_count        none                   default
+otus  snapdev               hidden                 default
+otus  acltype               off                    default
+otus  context               none                   default
+otus  fscontext             none                   default
+otus  defcontext            none                   default
+otus  rootcontext           none                   default
+otus  relatime              off                    default
+otus  redundant_metadata    all                    default
+otus  overlay               off                    default
+otus  encryption            off                    default
+otus  keylocation           none                   default
+otus  keyformat             none                   default
+otus  pbkdf2iters           0                      default
+otus  special_small_blocks  0                      default
+[root@zfs ~]# zfs get available otus
+NAME  PROPERTY   VALUE  SOURCE
+otus  available  350M   -
+[root@zfs ~]# zfs get readonly otus
+NAME  PROPERTY  VALUE   SOURCE
+otus  readonly  off     default
+[root@zfs ~]# zfs get recordsize otus
+NAME  PROPERTY    VALUE    SOURCE
+otus  recordsize  128K     local
+[root@zfs ~]# zfs get compression otus
+NAME  PROPERTY     VALUE     SOURCE
+otus  compression  zle       local
+[root@zfs ~]# zfs get checksum otus
+NAME  PROPERTY  VALUE      SOURCE
+otus  checksum  sha256     local
+[root@zfs ~]# wget -O otus_task2.file --no-check-certificate https://drive.google.com/u/0/uc?id=1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG&export=download
+[1] 13718
+[root@zfs ~]# --2022-02-14 11:02:08--  https://drive.google.com/u/0/uc?id=1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG
+Resolving drive.google.com (drive.google.com)... 209.85.233.194, 2a00:1450:4010:c03::c2
+Connecting to drive.google.com (drive.google.com)|209.85.233.194|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://drive.google.com/uc?id=1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG [following]
+--2022-02-14 11:02:08--  https://drive.google.com/uc?id=1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG
+Reusing existing connection to drive.google.com:443.
+HTTP request sent, awaiting response... 302 Moved Temporarily
+Location: https://doc-00-bo-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/17ttbm80bs9gbo45342vspm6e37optom/1644836475000/16189157874053420687/*/1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG [following]
+Warning: wildcards not supported in HTTP.
+--2022-02-14 11:02:12--  https://doc-00-bo-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/17ttbm80bs9gbo45342vspm6e37optom/1644836475000/16189157874053420687/*/1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG
+Resolving doc-00-bo-docs.googleusercontent.com (doc-00-bo-docs.googleusercontent.com)... 64.233.165.132, 2a00:1450:4010:c08::84
+Connecting to doc-00-bo-docs.googleusercontent.com (doc-00-bo-docs.googleusercontent.com)|64.233.165.132|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 5432736 (5.2M) [application/octet-stream]
+Saving to: 'otus_task2.file'
+
+100%[===================================================================================================================================================================================================================================================================================>] 5,432,736   4.95MB/s   in 1.0s
+
+2022-02-14 11:02:14 (4.95 MB/s) - 'otus_task2.file' saved [5432736/5432736]
+
+
+[1]+  Done                    wget -O otus_task2.file --no-check-certificate https://drive.google.com/u/0/uc?id=1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG
+[root@zfs ~]# zfs receive otus/test@today < otus_task2.file
+[root@zfs ~]# find /otus/test -name "secret_message"
+/otus/test/task1/file_mess/secret_message
+[root@zfs ~]# cat /otus/test/task1/file_mess/secret_message
+https://github.com/sindresorhus/awesome
