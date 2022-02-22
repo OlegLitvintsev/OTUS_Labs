@@ -7,7 +7,7 @@
 ## Порядок работы
 
 ### 1. Создание и настройка виртуальных машин сервера и клиента NFS 
-* создаем [Vagrantfile](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_5/Vagrantfile) описывающий VM сервера и клиента, ссылающийся на скрипты начальной настройки [nfss_script.sh](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_5/Vagrantfile) и [nfsс_script.sh](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_5/Vagrantfile) соответственно
+* создаем [Vagrantfile](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_5/Vagrantfile) описывающий VM сервера и клиента, ссылающийся на скрипты начальной настройки [nfss_script.sh](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_5/nfss_script.sh) и [nfsс_script.sh](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_5/nfsс_script.sh) соответственно
 ```
 sudo yum install nfs-utils nfs-utils-lib -y
 sudo systemctl start firewalld && sudo systemctl enable firewalld
@@ -130,6 +130,6 @@ total 0
 
 ## Результат работы
 
-* В репозиторий GitHUB добавлен [Vagrantfile](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_5/Vagrantfile), а так же скрипты начальной настройки сервера и клиента NFS [nfss_script.sh](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_5/Vagrantfile) и [nfsс_script.sh](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_5/Vagrantfile) соответственно , на которые есть ссылки в [Vagrantfile](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_5/Vagrantfile)
+* В репозиторий GitHUB добавлен [Vagrantfile](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_5/Vagrantfile), а так же скрипты начальной настройки сервера и клиента NFS [nfss_script.sh](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_5/nfss_script.sh) и [nfsс_script.sh](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_5/nfsс_script.sh) соответственно , на которые есть ссылки в [Vagrantfile](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_5/Vagrantfile)
 * В репозиторий GitHUB добавлено описание [README.md](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_5/README.md)
 
