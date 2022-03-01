@@ -7,8 +7,7 @@
 ## Описание работы
 
 * В репозиторий **GitHUB** добавлен [Vagrantfile](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_6/Vagrantfile),  который подключает 2 заранее отредактированных файла: спецификация для кастомной сборки **nginx** [nginx.spec](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_6/nginx.spec)
-и конфигурационный файл web сервера  **nginx** [default.conf](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_6/default.conf),  а так же скрипт начальной настройки   
-[rpmbngnx.sh](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_6/rpmbngnx.sh):
+и конфигурационный файл web сервера  **nginx** [default.conf](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_6/default.conf),  а так же скрипт начальной настройки [rpmbngnx.sh](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_6/rpmbngnx.sh):
 
 ```
 sudo su && cd /root
