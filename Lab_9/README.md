@@ -44,6 +44,7 @@ terminal=" ? "
         prrocState=$(cat $srcDir$var/stat | awk '{print $3}')
         utime=$(cat $srcDir$var/stat | awk '{print $14}')
         stime=$(cat $srcDir$var/stat | awk '{print $15}')
+	let time=utime+stime
 ```
 
 * Проверяем содержимое файла `cmdline` и если оно нулевое, то в качестве параметра **COMMAND** показываем содержимое файла `comm` в квадратных скобках. Иначе меняем в  строке из файла `cmdline` спецсимволы - разделители на традиционные пробелы, чтобы не получить на выходе слитную строку, и полученную строку присваиваем параметру **COMMAND**
@@ -150,4 +151,4 @@ PID     TTY     STAT    TIME    COMMAND
 ```
 
 ## Результат работы
-* В репозиторий **GitHUB** добавлен [psax.sh](https://github.com/OlegLitvintsev/OTUS_Lab/blob/master/Lab_9/psax.sh), который выводит требуемые данные и [Vagrantfile](https://github.com/OlegLitvintsev/OTUS_Lab/blob/master/Lab_9/Vagrantfile), поднимающий тестовую VM и копирующий скрипт [psax.sh](https://github.com/OlegLitvintsev/OTUS_Lab/blob/master/Lab_9/psax.sh) внутрь VM в каталог `/home/vagrant`.
+* В репозиторий **GitHUB** добавлен [psax.sh](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_9/psax.sh), который выводит требуемые данные и [Vagrantfile](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_9/Vagrantfile), поднимающий тестовую VM и копирующий скрипт [psax.sh](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_9/psax.sh) внутрь VM в каталог `/home/vagrant`.
