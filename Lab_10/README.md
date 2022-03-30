@@ -1,11 +1,11 @@
 # Лабораторная работа №10.  Загрузка системы
-[img1]: https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_10/img/scr_1_1.PNG "" 
-[img2]: https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_10/img/scr_1_2.PNG "" 
-[img3]: https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_10/img/scr_2_1.PNG "" 
-[img4]: https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_10/img/scr_2_2.PNG "" 
-[img5]: https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_10/img/scr_3_1.PNG "" 
-[img6]: https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_10/img/scr_3_2.PNG "" 
-[img7]: https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_10/img/scr_dracut.PNG "" 
+[img1]: https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_10/imgs/scr_1_1.PNG "" 
+[img2]: https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_10/imgs/scr_1_2.PNG "" 
+[img3]: https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_10/imgs/scr_2_1.PNG "" 
+[img4]: https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_10/imgs/scr_2_2.PNG "" 
+[img5]: https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_10/imgs/scr_3_1.PNG "" 
+[img6]: https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_10/imgs/scr_3_2.PNG "" 
+[img7]: https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_10/imgs/scr_dracut.PNG "" 
 
 ## Порядок работы
 
