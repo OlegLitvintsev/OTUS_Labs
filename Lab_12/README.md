@@ -121,7 +121,7 @@ Apr 12 13:09:13 selinux nginx[23563]: nginx: configuration file /etc/nginx/nginx
 Apr 12 13:09:13 selinux systemd[1]: Started The nginx HTTP and reverse proxy server.
 ```
 
-* Снова в конфигурации **nginx** меняется порт и производится неудачная попытка его рестарта
+* Отменяем добавление нестандартного порта и производим неудачную попытку рестарта **nginx**
 ```
 [root@selinux ~]# semanage port -d -t http_port_t -p tcp 4881
 [root@selinux ~]# systemctl restart nginx
