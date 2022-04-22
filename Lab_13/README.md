@@ -8,7 +8,7 @@
 
 
 ## Решение 
-* В репозиторий **GitHUB** добавлен [Vagrant файл](https://github.com/OlegLitvintsev/OTUS_Lab/blob/master/Lab_13/Vagrantfile)
+* В репозиторий **GitHUB** добавлен [Vagrant файл](https://github.com/OlegLitvintsev/OTUS_Labs/blob/main/Lab_13/Vagrantfile)
 ```
 # -*- mode: ruby -*-
 # vim: set ft=ruby :
@@ -41,7 +41,7 @@ Vagrant.configure("2") do |config|
 end
 ```
 
-который стартует скрипт, выполняющий все задания ([systemd.sh](https://github.com/OlegLitvintsev/OTUS_Lab/blob/master/Lab_13/systemd.sh)) 
+который стартует скрипт, выполняющий все задания ([systemd.sh](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_13/systemd.sh)) 
 
 ```
 #!/bin/bash
