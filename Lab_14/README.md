@@ -23,13 +23,13 @@ EXPOSE 8080
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
 ```
 
-В образе меняются конфигурационный файл ```nginx.conf```, начальная веб страница сервера ```index.html``` и указывается порт привязки 8080
+В образе изменяются конфигурационный файл ```nginx.conf```, начальная веб страница сервера ```index.html``` и указывается порт привязки 8080
 
 * Выполняется логин в свой реп докер хаба и далее сборка образа
 
 ```
 docker login
-docker build -t oglhb/ngnx:latest /home/den/OTUS_Lans/Lab_14/
+docker build -t oglhb/ngnx:latest /home/den/OTUS_Labs/Lab_14/
 ```
 * выполняется заливка образа в реп докерхаба
 
