@@ -23,8 +23,8 @@
 
 ```
 Office1 ---\
------> Central --inetRouter --> internet
-Office2----/
+-----> Central --- inetRouter --> internet
+Office2 ---/
 ```
 Итого должны получится следующие сервера
 - inetRouter
