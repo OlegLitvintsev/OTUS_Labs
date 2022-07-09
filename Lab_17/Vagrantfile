@@ -1,0 +1,43 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "centos/7"
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 1024
+    v.cpus = 1
+  end
+
+  config.vm.define "log-server" do |logs| 
+    logs.vm.provision "file", source: "my-rsyslogd.pp", destination: "my-rsyslogd.pp"
+    logs.vm.provision "file", source: "my-inimfile.pp", destination: "my-inimfile.pp"
+    logs.vm.network "private_network", ip: "192.168.50.10", virtualbox__intnet: "net1"
+    logs.vm.hostname = "log-server"
+    logs.vm.provision "shell", path: "server.sh"	
+    logs.vm.provision "shell", inline: <<-SHELL
+		echo "***********************************************************************"
+		echo "***********Start INLINE script on "$(hostname)
+		echo "***********************************************************************"
+		semodule -i /home/vagrant/my-rsyslogd.pp
+		semodule -i /home/vagrant/my-inimfile.pp
+		systemctl restart rsyslog 
+        SHELL
+  end
+
+  config.vm.define "log-client" do |logc|
+    logc.vm.network "private_network", ip: "192.168.50.11", virtualbox__intnet: "net1"
+    logc.vm.provision "file", source: "my-rsyslogd.pp", destination: "my-rsyslogd.pp"
+    logc.vm.provision "file", source: "my-inimfile.pp", destination: "my-inimfile.pp"
+    logc.vm.hostname = "log-client"
+    logc.vm.provision "shell", path: "client.sh"
+	logc.vm.provision "shell", inline: <<-SHELL
+		echo "***********************************************************************"
+		echo "***********Start INLINE script on "$(hostname)
+		echo "***********************************************************************"
+		semodule -i /home/vagrant/my-rsyslogd.pp
+		semodule -i /home/vagrant/my-inimfile.pp
+		systemctl restart rsyslog 
+        SHELL
+  end
+end
