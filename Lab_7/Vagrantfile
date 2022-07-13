@@ -1,0 +1,26 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "centos/7"
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 1024
+    v.cpus = 1
+  end
+
+  config.vm.define "anlog" do |anlog| 
+    anlog.vm.provision "file", source: "access-4560-644067.log", destination: "access-4560-644067.log"
+    anlog.vm.provision "file", source: "anlog.sh", destination: "anlog.sh"
+    anlog.vm.provision "file", source: "crn.sh", destination: "crn.sh"
+    anlog.vm.hostname = "anlog"	
+    anlog.vm.provision "shell", inline: <<-SHELL
+		echo "***********************************************************************"
+		echo "***********Start INLINE script on "$(hostname)
+		echo "***********************************************************************"
+		chmod +x anlog.sh
+		chmod +x crn.sh
+		sudo -u vagrant /home/vagrant/crn.sh 
+        SHELL
+  end
+end
