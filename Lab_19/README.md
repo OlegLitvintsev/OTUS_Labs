@@ -172,12 +172,12 @@ client-2022-07-21_12:15:03           Thu, 2022-07-21 12:15:05 [308c868970bce1629
 восстановить содержимое уже не получится т.к. **SSH** уже  на работает штатно и тогда нужно восстанавливать архив на сервере/другом хосте и каким-то образом заливать это на клиента (к примеру посредством **nfs**). Поэтому для 
 проверки штатного функционала СРК удаляется некритичный ресурс **/etc/vmware-tools/** и затем успешно восстанавливается из резервной копии.
 ```
-[root@client /]# rm -rf /etc/vmware-tools/
-[root@client /]# borg extract borg@192.168.11.150:/var/backup/client::client-2022-07-21_12:15:03 etc/vmware-tools
+[root@client ~]# rm -rf /etc/vmware-tools/
+[root@client ~]# borg extract borg@192.168.11.150:/var/backup/client::client-2022-07-21_12:15:03 etc/vmware-tools
 Using a pure-python msgpack! This will result in lower performance.
 Remote: Using a pure-python msgpack! This will result in lower performance.
 Enter passphrase for key ssh://borg@192.168.11.150/var/backup/client:
-[root@client /]# ls -l /etc/vmware-tools
+[root@client ~]# ls -l /etc/vmware-tools
 total 44
 drwxr-xr-x. 4 root root   35 Apr 30  2020 GuestProxyData
 -rw-r--r--. 1 root root  453 Apr  2  2020 guestproxy-ssl.conf
@@ -189,5 +189,5 @@ drwxr-xr-x. 3 root root   20 Apr 30  2020 scripts
 -rwxr-xr-x. 1 root root 4364 Apr  2  2020 suspend-vm-default
 drwxr-xr-x. 3 root root   21 Apr 30  2020 vgauth
 -rw-r--r--. 1 root root   60 Apr  2  2020 vgauth.conf
-[root@client /]#
+[root@client ~]#
 ```
