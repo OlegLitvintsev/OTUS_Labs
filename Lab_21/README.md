@@ -12,7 +12,7 @@
 
 * Для наглядности, схема сетевого взаимодействия узлов стенда
 
-![схема сети][/Lab_21/imgs/scheme.png]
+![схема сети](/Lab_21/imgs/scheme.png)
 
 * В репозиторий **GitHUB** добавлен [Vagrant файл](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_21/Vagrantfile),  который  разворачивает требуемый стенд из 4 виртуальных машин.
 
