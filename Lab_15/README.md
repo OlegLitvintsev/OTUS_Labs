@@ -4,4 +4,4 @@
 
 * На рабочем хосте с ранее установленным мною Zabbix-ом v.5 была выполнена настройка dashboard в соответствии с требованиями задания
 
-[Zabbix][https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Lab_15/imgs/Zabbix_dashboard.PNG]
+![Zabbix][/Lab_15/imgs/Zabbix_dashboard.PNG]
