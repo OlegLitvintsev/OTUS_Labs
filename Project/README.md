@@ -12,7 +12,7 @@
 
 ## Для организации WEB-портала развертывается инфраструктурная схема из 4-х виртуальных серверов:
 
-[Схема][https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Project/imgs/scheme.PNG]
+![Схема][/Project/imgs/scheme.PNG]
 
 * **inetrouter** - сервер приема входящих соединений для Frontend WordPress и Zabbix, осуществляется NAT-ирование, проброс порта TCP 443 до сервера **wordpress** и порта TCP 8080 до сервера **monlog**, установлено ПО:
   * rsyslog - для репликации логов на сервер **monlog**;
