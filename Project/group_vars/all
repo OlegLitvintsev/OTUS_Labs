@@ -1,0 +1,34 @@
+
+# WordPress database settings
+wp_db_name: wordpress
+wp_db_user: wordpress
+wp_db_password: wordpress_db_password
+  
+mysql_port: 3306
+mysql_root_password: WPDB_rt_55
+
+auto_up_disable: true
+
+server_hostname: wordpress
+
+# WordPress Version
+wp_version: 6.0.2
+wp_sha1sum: 72f9601b78cc0ad206ff19c9a235364cf3388b4d
+
+#Define Core Update Level
+#true  = Development, minor, and major updates are all enabled
+#false = Development, minor, and major updates are all disabled
+#minor = Minor updates are enabled, development, and major updates are disabled
+core_update_level: true
+
+auto_up_disable: true
+
+server_hostname: wordpress
+
+# Zabbix database settings
+zabbix_db_name: zabbix
+zabbix_db_user: zabbix
+zabbix_db_password: Whjhu_njj7
+
+# mysql_port: 3306
+# mysql_root_password: WPDB_rt_55

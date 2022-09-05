@@ -1,0 +1,130 @@
+# -*- mode: ruby -*-
+# vim: set ft=ruby :
+MACHINES = {
+	:inetrouter => {
+        :box_name => "generic/centos8s",
+        :net => [
+                   {ip: '192.168.57.1', adapter: 2, netmask: "255.255.255.248", virtualbox__intnet: "int_net"},
+                ]
+  },
+#	:backup => {
+#        :box_name => "generic/centos8s",
+#        :net => [
+#                  {ip: '192.168.57.2', adapter: 2, netmask: "255.255.255.248", virtualbox__intnet: "int_net"},
+#                ]
+#  },
+	:monlog => {
+        :box_name => "generic/centos8s",
+        :net => [
+                   {ip: '192.168.57.3', adapter: 2, netmask: "255.255.255.248", virtualbox__intnet: "int_net"},
+                ]
+  },  
+	:wordpress => {
+        :box_name => "generic/centos8s",
+        :net => [
+                   {ip: '192.168.57.4', adapter: 2, netmask: "255.255.255.248", virtualbox__intnet: "int_net"},
+                ]
+  },  
+}
+
+Vagrant.configure("2") do |config|
+
+if Vagrant.has_plugin?("vagrant-vbguest")
+  config.vbguest.auto_update = false
+end
+
+  MACHINES.each do |boxname, boxconfig|
+
+    config.vm.define boxname do |box|
+
+        box.vm.box = boxconfig[:box_name]
+        box.vm.host_name = boxname.to_s
+        
+        boxconfig[:net].each do |ipconf|
+          box.vm.network "private_network", ipconf
+        end
+
+        box.vm.provision "shell", inline: <<-SHELL
+          mkdir -p ~root/.ssh; cp ~vagrant/.ssh/auth* ~root/.ssh
+          sed -i '65s/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+          systemctl restart sshd
+          cp ~vagrant/.ssh/auth* ~root/.ssh
+        SHELL
+        
+        case boxname.to_s
+        when "inetrouter"
+
+            box.vm.provider :virtualbox do |box|
+             box.customize ["modifyvm", :id, "--cpus", "1"]
+             box.customize ["modifyvm", :id, "--memory", "512"]
+            end
+
+            box.vm.network :forwarded_port, guest: 443, host: 4431
+            box.vm.network :forwarded_port, guest: 8080, host: 8081
+
+#            box.vm.provision "shell", run: "always", inline: <<-SHELL
+#            sysctl net.ipv4.conf.all.forwarding=1
+#            systemctl enable firewalld && systemctl start firewalld
+#            firewall-cmd --zone=public --add-masquerade --permanent
+#            firewall-cmd --zone=public --add-forward-port=port=443:proto=tcp:toport=443:toaddr=192.168.57.4 --permanent
+#            firewall-cmd --reload
+#             SHELL
+
+            box.vm.provision "ansible" do |ansible|
+              ansible.playbook = 'playbook.yml'
+              ansible.tags = 'inetrouter'
+            end
+
+#	when "backup"
+#          box.vm.provision "shell", run: "always", inline: <<-SHELL
+#            sysctl net.ipv4.conf.all.forwarding=1
+#            ip r add 192.168.1.0/28	via 192.168.255.6 dev eth1
+#	    systemctl enable firewalld && systemctl start firewalld
+#	    firewall-cmd --zone=public --add-masquerade --permanent
+#	    firewall-cmd --zone=public --add-forward-port=port=80:proto=tcp:toport=8080:toaddr=192.168.1.2 --permanent
+#	    firewall-cmd --reload
+#			
+#            SHELL
+
+        when "monlog"
+          
+            box.vm.provider :virtualbox do |box|
+              box.customize ["modifyvm", :id, "--cpus", "2"]
+              box.customize ["modifyvm", :id, "--memory", "3072"]
+            end
+
+            box.vm.provision "ansible" do |ansible|
+              ansible.playbook = 'playbook.yml'
+              ansible.tags = 'monlog'
+            end
+
+#          box.vm.provision "shell", run: "always", inline: <<-SHELL
+#
+#	    echo -e "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEAzJT45S1Uj7SFiKtA8gH51TV97aniBL/OZ8PXz/qW4KJDah6a\n8VF15zS8dlhBil9q7VVDxfbbDHPtN07PAto0YqEqBzWYfWWBEpcyqAUykjV4HEVO\nFbBZsMe74CCKTlXc4qniKah5P HTUsWvyWqwpV4ygyJDKpTUZyIFcR+BSADu0iV5U\ncyjNeWLNpdJq5ZOdPG2BsxcL24K8URzTWIMzI4F/9Ha3Vyo+HHq7qwRirnAOE4K8\nxQ/SihTu+1Z+A+sSFFqC2LW46GXIFqYaIps0TR7W6QR0ON8iO9CALp+dCUdP5ZWg\nyyeq7L9YkNHSFvhd+FVTakySR4W84W0h64K6iwIDAQABAoIBAEUfRGUy hrKzPLbr\nndrm3gGyvCST1KDkKZoXqpBDy7yENqDhTFqiumJvCAo4UZSuHpOnzmlRubsgZBLe\n1sTQ8wgsCeY7rpUXuZ+NZHkuoGKUHEv5AqQDXJqFMa5NcE19Z09SNO78VFIf60ky\n/sSyDJnfEugRO9bL9TUwt/w1B5+58ZIkHNncBCItI94PLFv/4Qza3UUZifpOq3P8\nyGqDVXJqEWsc6UxypplvZ ScRBLJ2o029k/L3y53SQ2jO/nkcUGpizNkzVOJBAMes\ndgQuZQx6MqwRI3TZWDjJUcS8jaX+rJgfy0wGW6Iw2abn9GrztDam7aRa62Iu8fm9\n245xiKkCgYEA9CtNgB/x2KX6MyYlzxIaWfBG2hzUJs2YnhoUt22duJLXhQ1fs6au\nBjkgiNzJIFj6HAW83PoDpet9wYKm7EZJOCj4oIncff6z8/RJVs8r dCLEkzf9yRJa\nk6fGBbGY4T2R0OYMUVKBuSmD9or5F/Tlg6FJE0ea0KYSnuWPJX3pVp8CgYEA1n6g\nMzs8/cuLN5/5z0V/y11PD0Sy+tZj3EMfOhDX3DDflG78+UqtgNOp8ODR54yyQ1kP\nmokAVC+4SUlxKJoSiEcSZd/nsTZHBpdTCyjuyFotsbdu4wmbAgzZcOFfujScmRUm\nvwcNPHn2g7oCcqDIf T64rsLzDqCOP9yhcrUasJUCgYBGM+kdjJHBo78zU6WNSvwu\nncoRTjalTXmzA3avYqH1fqrew4Cfq63fdi9nimt9lHec9P1fX7cKzpGiwMjzqCXH\nMuiBaAHwa/obi0JG5lvtEU4JshCS7mcCizuBSZXWNRimwm4KN7m6njgl+8Ew5SXU\nWdwj4fOeSBGUhBZLRk9/qwKBgQC0rrn4LgB0sg817jaa2SqL frBoZjB2iD5afthB\nK4sKWskb2lqTDMsW6DYRSPDIooZPoSg5vwpd4EzWv1zpHNBbp7Lhyjj72IMAFFzJ\n29M5Rm2TdLed3KuMkJJiOhdPXZ5EfcLDzAbkWMDFudzx/mqkxj8ASAxC2BC7zvjZ\nDaHL+QKBgG8dl3dYfMtD9+wVj80fZXvDsXYtVFCMT9oVHKAAhqDt4i/GbL9A5mlo\njkJJ4QTnLLSmO IjSBUuSDab0vBLrynZ8xlyJaotP4n5hl3Qki96kQno5UXcyu2Kq\n3uZgvo9tEQKueypM2Fu7fCb0pnPhPSQF427jZnWrUJPcFUyYrvvY\n-----END RSA PRIVATE KEY-----" > ~vagrant/.ssh/id_rsa
+#	    cp /home/vagrant/.ssh/id_rsa /root/.ssh/ &&  chmod 400 /root/.ssh/id_rsa && chown vagrant:vagrant /home/vagrant/.ssh/id_rsa && chmod 400 /home/vagrant/.ssh/id_rsa
+#			
+#            SHELL
+			
+        when "wordpress"
+            box.vm.provider :virtualbox do |box|
+             box.customize ["modifyvm", :id, "--cpus", "2"]
+             box.customize ["modifyvm", :id, "--memory", "4096"]
+            end
+
+#            box.vm.network :forwarded_port, guest: 443, host: 4433
+
+            box.vm.provision "ansible" do |ansible|
+              ansible.playbook = 'playbook.yml'
+              ansible.tags = 'wordpress'
+            end
+
+#            box.vm.provision "shell", run: "always", inline: <<-SHELL
+#			
+#            SHELL
+	end
+		
+      end
+
+  end
+ 
+end
