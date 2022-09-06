@@ -1,7 +1,3 @@
-- hosts: wordpress
-
-  roles:
-
 - hosts: monlog
 
   roles:
@@ -14,14 +10,14 @@
     - role: inetrouter
       tags: inetrouter
 
+- hosts: backup
+
+  roles:
+    - role: backup
+      tags: backup
+
 - hosts: wordpress
 
   roles:
-#    - role: php
-#      tags: php
-#    - role: nginx
-#      tags: nginx
-#    - role: mysql
-#      tags: mysql
     - role: wordpress
       tags: wordpress

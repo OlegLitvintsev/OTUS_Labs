@@ -1,10 +1,10 @@
 ---
 
-- name: Temporary set SELinux to Permissive mode
-  ansible.posix.selinux:
-    policy: targeted
-    state: permissive
-  become: true
+#- name: Temporary set SELinux to Permissive mode
+#  ansible.posix.selinux:
+#    policy: targeted
+#    state: permissive
+#  become: true
 
 # tasks for SELinux & firewalld configuration ------------------------------------------------------------------------------
 
@@ -28,18 +28,18 @@
     persistent: yes
   become: yes
 
-#- name: Copy SELinux policy module file
-#  copy:
-#    src: ../../../files/policy_wordpress.pp
-#    dest: /root/policy_wordpress.pp
-#    owner: root
-#    group: root
-#    mode: '0644'
-#  become: yes
+- name: Copy SELinux policy module file
+  copy:
+    src: ../../../files/policy_wordpress.pp
+    dest: /root/policy_wordpress.pp
+    owner: root
+    group: root
+    mode: '0644'
+  become: yes
 
-#- name: Install SELinux policy module
-#  shell: semodule -i /root/policy_wordpress.pp
-#  become: yes
+- name: Install SELinux policy module
+  shell: semodule -i /root/policy_wordpress.pp
+  become: yes
 
 - name: Enable HTTPS traffic
   firewalld:
@@ -71,13 +71,13 @@
 # tasks for MySQL install ------------------------------------------------------------------------------------------------
 
 - name: Install mysql
-  become: true
-  yum:
+  become: yes
+  dnf:
     name: 'mysql-server'
     state: present
 
 - name: Install PyMySQL
-  become: true
+  become: yes
   shell: pip3 install pymysql
 
 - name: Copy .my.cnf file with root password credentials
@@ -87,14 +87,17 @@
     owner: root
     mode: '0600'
     force: no
-  become: true
+  become: yes
 
 - name: Start the MySQL service
-  become: true
-  action: service name=mysqld state=started
+  become: yes
+  service:
+    name: mysqld
+    enabled: yes
+    state: started
 
 - name: Set root user password
-  become: true
+  become: yes
   become_user: root
   mysql_user:
     name: root
@@ -105,32 +108,32 @@
     - 127.0.0.1
 
 - name: Copy .my.cnf file with root password credentials
-  become: true
+  become: yes
   template: src=../templates/.my.cnf2 dest=/root/.my.cnf owner=root mode=0600
 
 - name: Create mysql user
-  become: true
+  become: yes
   mysql_user:
     name: "{{ wp_db_user }}"
     password: "{{ wp_db_password }}"
     priv: "*.*:ALL"
 
 - name: Create mysql database
-  become: true
+  become: yes
   mysql_db:
     name: "{{ wp_db_name }}"
     state: present
 
 - name: Delete anonymous MySQL server user for $server_hostname
-  become: true
+  become: yes
   action: mysql_user user="" host="{{ server_hostname }}" state="absent"
 
 - name: Delete anonymous MySQL server user for localhost
-  become: true
+  become: yes
   action: mysql_user user="" state="absent"
 
 - name: Remove the MySQL test database
-  become: true
+  become: yes
   action: mysql_db db=test state=absent
 
 # tasks for WordPress install ------------------------------------------------------------------------------------------------
@@ -271,6 +274,7 @@
   become: yes
   service:
     name: rsyslog
+    enabled: yes
     state: restarted
 
 # tasks for nginx install ------------------------------------------------------------------------------------------------
@@ -310,6 +314,7 @@
   become: yes
   service:
     name: nginx
+    enabled: yes
     state: started
 
 - name: Create a /etc/ssl/private directory if it does not exist
@@ -410,8 +415,9 @@
     replace: 'Hostname=wordpress'
   become: yes
 
-- name: Reload zabbix_agentd
+- name: Reload zabbix_agent
   become: yes
   service:
     name: zabbix-agent
+    enabled: yes
     state: restarted
