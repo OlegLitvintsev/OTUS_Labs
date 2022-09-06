@@ -37,5 +37,5 @@
   * rsyslog - для репликации логов на сервер **monlog**;
   * Zabbix agent - для мониторинга сервером Zabbix (**monlog**).
 
-### **Vagrant**, в соответствии с [Vagrantfile](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Project/Vagrantfile), развертывает 4 виртуальные машины, **provision** которых выполняется при помощи **playbook Ansible** [playbook.yml](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Project/playbook.yml), выполняющий 4 роли, имеющие имена, соответствующие именам развертываемых ими серверов. Селекция ролей относительно серверов осуществляется метками **tags** в соответствующих разделах **provision** [Vagrantfile](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Project/Vagrantfile).
+#### **Vagrant**, в соответствии с [Vagrantfile](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Project/Vagrantfile), развертывает 4 виртуальные машины, **provision** которых выполняется при помощи **playbook Ansible** [playbook.yml](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Project/playbook.yml), выполняющий 4 роли, имеющие имена, соответствующие именам развертываемых ими серверов. Селекция ролей относительно серверов осуществляется метками **tags** в соответствующих разделах **provision** [Vagrantfile](https://github.com/OlegLitvintsev/OTUS_Labs/blob/master/Project/Vagrantfile).
 
