@@ -1,30 +1,39 @@
 ---
-- name: Temporary set SELinux to Permissive mode
-  ansible.posix.selinux:
-    policy: targeted
-    state: permissive
-  become: true
+#- name: Temporary set SELinux to Permissive mode
+#  ansible.posix.selinux:
+#    policy: targeted
+#    state: permissive
+#  become: true
 
-# tasks for SELinux configuration -----------------------------------------------------------------------------------------
-
-- name: Install python3-libsemanage
+- name: Install setools
   dnf:
-    name: python3-libsemanage
+    name:
+      - setroubleshoot
+      - setools
     state: present
   become: yes
 
-#- name: Copy SELinux policy module file
-#  copy:
-#    src: ../../../files/policy_backup.pp
-#    dest: /root/policy_backup.pp
-#    owner: root
-#    group: root
-#    mode: '0644'
-#  become: yes
+# tasks for SELinux configuration -----------------------------------------------------------------------------------------
 
-#- name: Install SELinux policy module
-#  shell: semodule -i /root/policy_backup.pp
-#  become: yes
+- name: Enable domain_can_mmap_files
+  ansible.posix.seboolean:
+    name: domain_can_mmap_files
+    state: yes
+    persistent: yes
+  become: yes
+
+- name: Copy SELinux policy module file
+  copy:
+    src: ../../../files/policy_backup.pp
+    dest: /root/policy_backup.pp
+    owner: root
+    group: root
+    mode: '0644'
+  become: yes
+
+- name: Install SELinux policy module
+  shell: semodule -i /root/policy_backup.pp
+  become: yes
 
 - name: Enable Zabbix traffic
   firewalld:
@@ -93,6 +102,7 @@
   become: yes
   service:
     name: zabbix-agent
+    enabled: yes
     state: restarted
 
 # tasks for BorgBackup install ------------------------------------------------------------------------------------------------
@@ -134,4 +144,5 @@
   become: yes
   service:
     name: rsyslog
+    enabled: yes
     state: restarted

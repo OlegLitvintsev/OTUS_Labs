@@ -1,15 +1,30 @@
 ---
 
-- name: Temporary set SELinux to Permissive mode
-  ansible.posix.selinux:
-    policy: targeted
-    state: permissive
-  become: true
+#- name: Temporary set SELinux to Permissive mode
+#  ansible.posix.selinux:
+#    policy: targeted
+#    state: permissive
+#  become: true
 
-- name: Install policycoreutils-python3
+- name: Install setools
   dnf:
-    name: policycoreutils-python3
+    name: 
+      - setroubleshoot 
+      - setools
     state: present
+  become: yes
+
+- name: Copy SELinux policy module file
+  copy:
+    src: ../../../files/policy_inetrouter.pp
+    dest: /root/policy_inetrouter.pp
+    owner: root
+    group: root
+    mode: '0644'
+  become: yes
+
+- name: Install SELinux policy module
+  shell: semodule -i /root/policy_inetrouter.pp
   become: yes
 
 # tasks for inetrouter server provisioning
@@ -165,6 +180,7 @@
   become: yes
   service:
     name: zabbix-agent
+    enabled: yes
     state: restarted
 
 # tasks for rsyslog install ------------------------------------------------------------------------------------------------
@@ -187,4 +203,5 @@
   become: yes
   service:
     name: rsyslog
+    enabled: yes
     state: restarted
